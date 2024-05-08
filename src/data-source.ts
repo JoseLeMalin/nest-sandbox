@@ -1,5 +1,4 @@
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "./users/entities/user.entity";
+import { TypeOrmModule } from "@nestjs/typeorm";import { User } from "./users/entities/user.entity";
 import { env } from "./lib/env.validation";
 
 // console.log("env.POSTGRESDB_LOCAL_PORT", env.POSTGRESDB_LOCAL_PORT);
@@ -17,6 +16,7 @@ export const AppDataSource = TypeOrmModule.forRoot({
   entities: [User],
   subscribers: [],
   migrations: [],
+  entitySkipConstructor: true,
 });
 
 // AppDataSource.initialize()
