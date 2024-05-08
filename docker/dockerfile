@@ -1,0 +1,67 @@
+# command: docker build .
+# Use an official Node.js runtime as a base image
+# ode:21-alpine3.19
+#  /app
+# the working directory in the container
+# R /app
+# 
+# all pnpm globally
+# m install -g pnpm
+# 
+#  package.json, pnpm-lock.yaml, and pnpm-workspace.yaml to the working directory
+#  package.json ./app
+#  pnpm-lock.yaml ./app
+# 
+# all project dependencies using pnpm
+# pm install
+# 
+#  the rest of the application code to the working directory
+#  . .
+# 
+# d the Next.js application
+# pnpm build
+# pm prune
+# 
+# se the port that the application will run on
+#  3000
+# 
+# ne the command to run your application
+# pnpm", "dev"]
+
+# HOT RELOAD ISNT SUPPOSED TO WORK WITH WINDOWS AND DOCKER
+# STILL THERE'S A COMMAND WORTH TO TRY: https://stackoverflow.com/questions/39239686/nodemon-doesnt-restart-in-windows-docker-environment
+# nodemon --legacy-watch server.js
+
+
+FROM node:18.17.0
+# Set the working directory in the container
+WORKDIR /app
+# Copy package.json and pnpm-lock.yaml
+COPY pnpm-lock.yaml package.json ./
+# Github Solution : https://github.com/pnpm/pnpm/issues/784#issuecomment-1518582235
+# Enable `pnpm add --global` on Alpine Linux by setting
+# home location environment variable to a location already in $PATH
+# https://github.com/pnpm/pnpm/issues/784#issuecomment-1518582235
+# Install pnpm with corepack
+RUN corepack enable && corepack prepare pnpm@8.14.0 --activate
+ENV PNPM_HOME=/usr/local/bin    
+# Install app dependencies using PNPM
+#RUN npm install -g pnpm@8.14.0
+RUN npm config get prefix
+
+# Copy typescript file
+#COPY tsconfig.json ./
+
+RUN pnpm install -g typescript@5.3.3
+# Copy the application code 
+COPY . .
+# Install dependencies
+RUN pnpm i
+# Build the TypeScript code
+# RUN pnpm build
+# Expose the app
+EXPOSE 3000
+# Start the application
+CMD ["pnpm", "start"]
+#CMD ["pnpm", "devbis2"]
+#CMD ["pnpm", "nodemon"]
