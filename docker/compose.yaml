@@ -1,5 +1,4 @@
-version: '3.8'
-# command: docker compose up --build
+version: "3.8"# command: docker compose up --build
 # https://medium.com/@jewelski/quickly-set-up-a-local-postgres-database-using-docker-5098052a4726
 # https://www.docker.com/blog/how-to-use-the-postgres-docker-official-image/#Why-should-you-containerize-Postgres
 # https://github.com/docker/awesome-compose/tree/master/postgresql-pgadmin
@@ -10,13 +9,9 @@ services:
   # Application
   nest-sandbox-app:
     build:
-      context: ../ 
+      context: ../
       dockerfile: docker/dockerfile
     container_name: node-sandbox-app
-    # environment:
-    #   - POSTGRES_USER=${POSTGRES_USER}
-    #   - POSTGRES_PASSWORD=${POSTGRES_PW}
-    #   - POSTGRES_DB=${POSTGRES_DB} #optional (specify default database instead of $POSTGRES_DB)
     env_file:
       - ../.env.dev
     ports:
@@ -28,17 +23,16 @@ services:
     container_name: nest-back-sandbox
     image: postgres:15.5-alpine3.18
     restart: unless-stopped
-    env_file: ../.env.dev
-    # environment:
-    #   - POSTGRES_USER=${POSTGRES_USER}
-    #   - POSTGRES_PASSWORD=${POSTGRES_PW}
-    #   - POSTGRES_DB=${POSTGRES_DB} #optional (specify default database instead of $POSTGRES_DB)
+    # env_file: ../.env.dev
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - POSTGRES_DB=${POSTGRES_DB} #optional (specify default database instead of $POSTGRES_DB)
     hostname: localhost
     ports:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  
 
 volumes:
   postgres-data:
