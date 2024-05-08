@@ -7,6 +7,7 @@ import { env } from "./lib/env.validation";
 export const AppDataSource = TypeOrmModule.forRoot({
   type: "postgres",
   host: "localhost",
+  url: env.DATABASE_URL,
   port: env.POSTGRESDB_LOCAL_PORT,
   username: env.POSTGRES_USER,
   password: env.POSTGRES_PASSWORD,
