@@ -28,6 +28,6 @@ export const env = {
   POSTGRESDB_LOCAL_PORT: 5432,
   POSTGRES_USER: "JoseLeMalin",
   POSTGRES_PASSWORD: "123456",
-  POSTGRES_DB: "node_sandbox_db",
+  POSTGRES_DB: "node-sandbox-server",
   POSTGRES_SYNCHRONIZE: "true",
 };

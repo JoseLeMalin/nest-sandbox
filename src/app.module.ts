@@ -1,18 +1,16 @@
-import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
+import { Module } from "@nestjs/common";import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { UsersModule } from "./users/users.module";
 import { WsModule } from "./ws/ws.module";
 import { AppDataSource } from "./data-source";
 import { DataSource } from "typeorm";
 import { ConfigModule } from "@nestjs/config";
-import config from "src/config/configuration";
-
+// import config from "src/config/configuration";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [config],
+     //  load: [config],
     }),
     UsersModule,
     WsModule,
@@ -22,5 +20,15 @@ import config from "src/config/configuration";
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) {
+
+    // dataSource
+    //   .initialize()
+    //   .then(() => {
+    //     console.log("Data Source has been initialized!");
+    //   })
+    //   .catch((err) => {
+    //     console.error("Error during Data Source initialization:", err);
+    //   });
+  }
 }

@@ -1,20 +1,23 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-export enum UserRole {
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+export enum Role {
   ADMIN = "admin",
   EDITOR = "editor",
   READER = "reader",
+  USER = "user",
   GHOST = "ghost",
 }
 
-@Entity()
-export class User {
+@Entity({
+  name: "User",
+})
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: number;
-  @Column("timestamp with local time zone")
+  id: string;
+  @Column("timestamp without time zone")
   createdAt: Date;
-  @Column("timestamp with local time zone")
+  @Column("timestamp without time zone")
   updatedAt: Date;
-  @Column("string")
+  @Column("text")
   name: string;
   @Column("text")
   email: string;
@@ -22,13 +25,14 @@ export class User {
   password: string;
   @Column({
     type: "enum",
-    enum: UserRole,
-    default: UserRole.READER,
+    enum: Role,
+    default: Role.READER,
   })
-  role: UserRole.READER;
+  role: Role.READER;
 
   // Set a constructor, avoiding TS errors
   constructor({ id, createdAt, name, updatedAt, email, password, role }: User) {
+    super();
     this.id = id;
     this.name = name;
     this.createdAt = createdAt;
