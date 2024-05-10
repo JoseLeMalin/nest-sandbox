@@ -28,7 +28,7 @@ export class User extends BaseEntity {
     enum: Role,
     default: Role.READER,
   })
-  role: Role.READER;
+  role: Role;
 
   // Set a constructor, avoiding TS errors
   constructor({ id, createdAt, name, updatedAt, email, password, role }: User) {
