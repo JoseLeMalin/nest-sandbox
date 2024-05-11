@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BasePGEntities } from "src/types/entities/metadata.entities";import { Column, Entity } from "typeorm";
+
 export enum Role {
   ADMIN = "admin",
   EDITOR = "editor",
@@ -10,13 +11,14 @@ export enum Role {
 @Entity({
   name: "User",
 })
-export class User extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-  @Column("timestamp without time zone")
-  createdAt: Date;
-  @Column("timestamp without time zone")
-  updatedAt: Date;
+export class User extends BasePGEntities {
+  // @PrimaryGeneratedColumn("uuid")
+  // id: string;
+  // @Column("timestamp without time zone")
+  // createdAt: Date;
+  // @Column("timestamp without time zone")
+  // updatedAt: Date;
+
   @Column("text")
   name: string;
   @Column("text")
@@ -32,11 +34,11 @@ export class User extends BaseEntity {
 
   // Set a constructor, avoiding TS errors
   constructor({ id, createdAt, name, updatedAt, email, password, role }: User) {
-    super();
+    super({ id, createdAt, updatedAt });
     this.id = id;
     this.name = name;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    // this.createdAt = createdAt;
+    // this.updatedAt = updatedAt;
     this.email = email;
     this.password = password;
     this.role = role;

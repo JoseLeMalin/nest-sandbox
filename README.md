@@ -75,15 +75,15 @@ Nest is [MIT licensed](LICENSE).
 
 ### Resources:
 
-    nest g resource <resourceName>
+    nest g resource <resourceName> | nest g res <resourceName>
 
 ### Controller:
 
-    nest g controller <resourceName>
+    nest g controller <resourceName> | nest g co <resourceName>
 
-### Resources:
+### Modules:
 
-    nest g resource <resourceName>
+    nest g module <resourceName> | nest g mo <resourceName>
 
 ### Resources:
 

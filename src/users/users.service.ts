@@ -6,6 +6,7 @@ import { User } from "./entities/user.entity";
 import { DataSource, Repository } from "typeorm";
 import { v4 } from "uuid";
 import * as dayjs from "dayjs";
+import { UpdateFormatter } from "src/utils/querybuilders/genericfunctions";
 
 @Injectable()
 export class UsersService {
@@ -13,6 +14,7 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private dataSource: DataSource,
+    private updateFormatter: UpdateFormatter,
   ) {}
 
   findAll() {
@@ -41,8 +43,9 @@ export class UsersService {
         updatedAt: dayjs().toDate(),
       };
       console.log("testUser", newUser, id);
-
-      const insertResult = this.usersRepository.insert(newUser);
+      const insertResult = this.dataSource.createQueryBuilder().update(User).set(newUser).returning("*").execute();
+      console.log("insertResult", insertResult);
+      // const insertResult = this.usersRepository.insert(newUser);
       console.log("insertResult", insertResult);
       return newUser;
     } catch (error) {
@@ -51,12 +54,23 @@ export class UsersService {
     }
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     try {
       console.log("updateUserDto", updateUserDto);
+      const userFormated = this.updateFormatter.updateMetadata<UpdateUserDto>(updateUserDto);
+      // const resultQuery = this.updateFormatter.sendUpdateQuery(userFormated);
+      console.log("userFormated: ", userFormated);
 
-      const updatedUser = this.usersRepository.update(id, updateUserDto);
-      return updatedUser;
+      // const updatedUser = await this.dataSource
+      //   .createQueryBuilder()
+      //   .update<User>(User)
+      //   .set(updateUserDto)
+      //   .where("id = :id", { id })
+      //   .returning("*")
+      //   .execute();
+      // console.log("updatedUser", updatedUser);
+
+      return;
     } catch (error) {
       console.error("error", error);
       return error;

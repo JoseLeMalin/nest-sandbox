@@ -5,6 +5,11 @@ import { WsModule } from "./ws/ws.module";
 import { AppDataSource } from "./data-source";
 import { DataSource } from "typeorm";
 import { ConfigModule } from "@nestjs/config";
+import { MoController } from './items/mo/mo.controller';
+import { ItemsController } from './items/items.controller';
+import { ItemsModule } from './items/items.module';
+import { ItemsbisModule } from './itemsbis/itemsbis.module';
+import { ItemsModule } from './items/items.module';
 // import config from "src/config/configuration";
 
 @Module({
@@ -15,8 +20,10 @@ import { ConfigModule } from "@nestjs/config";
     UsersModule,
     WsModule,
     AppDataSource,
+    ItemsModule,
+    ItemsbisModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, MoController, ItemsController],
   providers: [AppService],
 })
 export class AppModule {
