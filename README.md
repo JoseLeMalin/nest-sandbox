@@ -88,3 +88,11 @@ Nest is [MIT licensed](LICENSE).
 ### Resources:
 
     nest g resource <resourceName>
+
+
+
+## Folder Structure
+  https://medium.com/the-crowdlinker-chronicle/best-way-to-structure-your-directory-code-nestjs-a06c7a641401
+
+## shared module 
+https://medium.com/@briankworld/creating-a-shared-module-in-nestjs-benefits-and-use-cases-6292a1dcd200
