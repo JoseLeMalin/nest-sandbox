@@ -1,0 +1,1 @@
+import { Module } from "@nestjs/common";import { LoggersService } from "./loggers.service";import { LoggersController } from "./loggers.controller";@Module({  controllers: [LoggersController],  providers: [LoggersService],  exports: [LoggersService],})export class LoggersModule {}

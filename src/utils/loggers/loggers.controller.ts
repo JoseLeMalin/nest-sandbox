@@ -1,0 +1,1 @@
+import { Controller } from "@nestjs/common";import { LoggersService } from "./loggers.service";@Controller()export class LoggersController {  constructor(private readonly loggersService: LoggersService) {}}
