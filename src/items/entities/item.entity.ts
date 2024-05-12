@@ -1,1 +1,1 @@
-export class Item {}
+import { BasePGEntities } from "src/types/entities/metadata.entities";import { Entity } from "typeorm";@Entity({  synchronize: false,})export class Item extends BasePGEntities {  constructor(id: string, createdAt: Date, updatedAt: Date) {    super({ id, createdAt, updatedAt });  }}export type UpdateItem = Required<Pick<Item, "id">> & Partial<Item>;

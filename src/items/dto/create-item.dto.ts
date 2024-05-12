@@ -1,1 +1,1 @@
-export class CreateItemDto {}
+export class CreateItemDtoInput {  name: string;  value: number;  weight: number;  constructor(name: string, value: number, weight: number) {    this.name = name;    this.value = value;    this.weight = weight;  }}export class CreateItemDtoOutput {  id: string;  name: string;  value: number;  weight: number;  constructor(id: string, name: string, value: number, weight: number) {    this.id = id;    this.name = name;    this.value = value;    this.weight = weight;  }}

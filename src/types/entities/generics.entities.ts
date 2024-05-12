@@ -1,1 +1,1 @@
-export type DbCreateModels = CreateUser | CreateDeck
+import { CreateItemDtoInput, CreateItemDtoOutput } from "src/items/dto/create-item.dto";import { UpdateItem } from "src/items/entities/item.entity";import { CreateUserDtoInput } from "src/users/dto/create-user.dto";import { UpdateUser } from "src/users/entities/user.entity";export type DbCreateModels = CreateUserDtoInput | CreateItemDtoInput;export type DbUpdateModels = UpdateUser | UpdateItem;export type DbModels = CreateUserDtoInput | CreateItemDtoOutput;
