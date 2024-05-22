@@ -1,60 +1,103 @@
-import { redisClient } from "src/config/redis.config";import { users } from "assets/data/users.json";
+import { redisClient } from "src/config/redis.config";
+import { checkins } from "assets/data/checkins.json";
+import { users } from "assets/data/users.json";
+import { locationDetails } from "assets/data/locationdetails.json";
+import { locations } from "assets/data/locations.json";
 
-export const getOrSetCache = async (key: string, cb?: unknown) => {
+type TLoadData = {
+  jsonArray: (
+    | {
+        id: string;
+        userId: number;
+        locationId: number;
+        starRating: number;
+      }
+    | {
+        id: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        numCheckins: number;
+        lastCheckin: number;
+        lastSeenAt: number;
+      }
+    | {
+        id: number;
+        hours: {
+          day: string;
+          hours: string;
+        }[];
+        socials: {
+          instagram: string;
+          facebook: string;
+          twitter: string;
+        }[];
+        website: string;
+        description: string;
+        phone: string;
+      }
+    | {
+        id: number;
+        name: string;
+        category: string;
+        location: string;
+        numCheckins: number;
+        numStars: number;
+        averageStars: number;
+      }
+  )[];
+};
+
+export const getOrSetCache = async (key: string, cb: () => Promise<unknown>) => {
   return new Promise(async (resolve, reject) => {
-    console.log("key", key, cb);
-
-    const client = await redisClient();
-    client
+    const client = (await redisClient()).redisClient;
+    const result = await client
       .get(key)
-      .then((data) => {
-        if (data) {
-          console.log("data", data);
-          return resolve(JSON.parse(data));
-        } else {
-          client.set(key, "Je suis un test de setorcache");
-        }
-      })
+
       .catch((error) => {
         console.log("error", error);
         return reject(error);
       });
+    if (!result || result === null) {
+      const result = await cb();
+      return resolve(result);
+    }
+    return resolve(result);
   });
 };
 
-const loadData = async (
-  jsonArray: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    numCheckins: number;
-    lastCheckin: number;
-    lastSeenAt: number;
-  }[],
-  keyName: string,
-) => {
-  const client = await redisClient();
-  // for (const obj of jsonArray) {
-  //   client.set(keyName, JSON.stringify({ ...obj }));
-  // }
-  client.set(keyName, JSON.stringify(jsonArray));
-  // const responses = await client.rPush(keyName, );
-  // let errorCount = 0;
-  //
-  // for (const response of responses) {
-  //   if (response[0] !== null) {
-  //     errorCount += 1;
-  //   }
-  // }
-
-  // pipeline.quit()
-  return true;
+const loadData = async (jsonArray: TLoadData, keyName: string) => {
+  const client = (await redisClient()).redisClient;
+  await client.set(keyName, JSON.stringify(jsonArray));
 };
-export const loadUsers = async () => {
+
+export const loadAll = async () => {
+  await loadUsers();
+  await loadCheckins();
+  await loadLocationDetails();
+  await loadLocations();
+};
+
+const loadUsers = async () => {
   console.log("Loading user data...");
 
-  const errorCount = await loadData(users, "users");
-  console.log(`User data loaded with ${errorCount} errors.`);
+  await loadData({ jsonArray: users }, "users");
+};
+
+const loadCheckins = async () => {
+  console.log("Loading user data...");
+
+  await loadData({ jsonArray: checkins }, "checkins");
+};
+
+const loadLocationDetails = async () => {
+  console.log("Loading locationsDetails data...");
+
+  await loadData({ jsonArray: locationDetails }, "locationDetails");
+};
+const loadLocations = async () => {
+  console.log("Loading locations data...");
+
+  await loadData({ jsonArray: locations }, "locations");
 };

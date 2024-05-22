@@ -18,24 +18,36 @@ export class UsersService {
   ) {}
 
   async findAll(): Promise<User[]> {
-    const client = await redisClient();
-    await client.setEx("foo", 3600, "bar");
-    const resultGetSet = await getOrSetCache("foo");
-    // const value = await client.get("foo", (error, data) => {
-    //   if (error) console.log("error", error);
-    //   if (data !== null) {
-    //     return
-    //   } else {
-    //
-    //   }
-    // });
-    console.log("resultGetSet ", resultGetSet);
+    const client = (await redisClient()).redisClient;
 
+    // await client.setEx("foo", 3600, "bar");
+    const resultGetSet = await getOrSetCache("foo", async () => {
+      return new Promise((resolve, reject) => {
+        client
+          .setEx(
+            "foo",
+            3600,
+            JSON.stringify({
+              id: 1,
+            }),
+          )
+          .catch((error) => {
+            console.log("error", error);
+            return reject(error);
+          });
+        resolve({
+          id: 1,
+        });
+      });
+    });
+    console.log("await client.get('foo')", await client.get("foo"));
+
+    
+    client.quit();
     const users = await this.usersRepository.find();
     // const users = await this.dataSource.getRepository(User).createQueryBuilder("user").getMany();
 
     console.log("users", users);
-    client.quit();
     return users;
   }
 
