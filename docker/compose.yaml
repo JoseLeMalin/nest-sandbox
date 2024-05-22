@@ -36,15 +36,19 @@ services:
 
   # Redisstack to try
   # https://www.emmanuelgautier.com/blog/snippets/redis-stack-docker-compose
-  
-  # Redis
   nest-sandbox-redis:
-    image: redis:latest
-    container_name: nest-sandbox-redis
+    image: redis/redis-stack:latest
     restart: always
     hostname: localhost
+    environment: 
+      - REDIS_ARGS= --save 20 1
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PASS=mypassword
+      - REDIS_APPENDONLY=yes
+      - REDIS_APPENDFSYNC=always
     ports:
       - "6379:6379"
+      - "8001:8001"
     volumes:
       - redis_volume_data:/data
     healthcheck:
@@ -52,18 +56,34 @@ services:
       interval: 1s
       timeout: 3s
       retries: 5
-    command: ["redis-server"]
-
-  # RedisInsight
-  nest-sandbox-redis-insight:
-    image: redislabs/redisinsight:latest
-    container_name: nest-sandbox-redis-insight
-    restart: always
-    hostname: localhost
-    ports:
-      - "5540:5540"
-    volumes:
-      - redis-insight_volume_data:/db
+  
+  # Redis
+  # nest-sandbox-redis:
+  #   image: redis:latest
+  #   container_name: nest-sandbox-redis
+  #   restart: always
+  #   hostname: localhost
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_volume_data:/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+  #     interval: 1s
+  #     timeout: 3s
+  #     retries: 5
+  #   command: ["redis-server"]
+# 
+  # # RedisInsight
+  # nest-sandbox-redis-insight:
+  #   image: redislabs/redisinsight:latest
+  #   container_name: nest-sandbox-redis-insight
+  #   restart: always
+  #   hostname: localhost
+  #   ports:
+  #     - "5540:5540"
+  #   volumes:
+  #     - redis-insight_volume_data:/db
 
 volumes:
   postgres-data:
