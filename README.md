@@ -96,3 +96,7 @@ Nest is [MIT licensed](LICENSE).
 
 ## shared module 
 https://medium.com/@briankworld/creating-a-shared-module-in-nestjs-benefits-and-use-cases-6292a1dcd200
+
+# Redis
+    https://redis.io/docs/latest/operate/redisinsight/install/install-on-docker/
+    http://localhost:5540/api/health/
