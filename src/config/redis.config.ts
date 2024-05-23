@@ -4,6 +4,19 @@ type TredisClient = {
   redisClient: RedisClient;
 };
 
+// Client config parameters list
+// https://github.com/redis/node-redis/blob/master/docs/client-configuration.md
+const client = createClient({
+  socket: {
+    port: 6379,
+    host: "localhost",
+  }
+})
+.on("error", (err) => console.log("Redis Client Error", err))
+.connect();
+
+export const getRedisClient = async (): Promise<RedisClient> => client;
+
 export const redisClient = async (): Promise<TredisClient> => {
   const client = await createClient()
     .on("error", (err) => console.log("Redis Client Error", err))
