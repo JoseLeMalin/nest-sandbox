@@ -1,7 +1,7 @@
 {
   "type": "commonjs",
   "types": "node, jest",
-  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "rootDirs": ["src"],
