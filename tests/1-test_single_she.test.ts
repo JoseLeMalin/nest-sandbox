@@ -34,7 +34,6 @@ describe("AppController (e2e)", async () => {
 
   test(`${testSuiteName}: lua test`, async () => {
     
-
   // Load script and get its SHA back.
   const sha = await updateIfLowestScript.load();
 
