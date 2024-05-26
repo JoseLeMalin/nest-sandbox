@@ -1,4 +1,4 @@
-import { getRedisClient } from "../src/config/redis.config";// const config = require("better-config");
+import { getRedisClient } from "../src/config/redis.config"; // const config = require("better-config");
 
 // config.set("../config.json");
 
@@ -33,14 +33,13 @@ describe("AppController (e2e)", async () => {
   });
 
   test(`${testSuiteName}: lua test`, async () => {
-    
-  // Load script and get its SHA back.
-  const sha = await updateIfLowestScript.load();
+    // Load script and get its SHA back.
+    const sha = await updateIfLowestScript.load();
 
-  // Execute script (1 = number of Redis keys).
-  const result = await client.evalshaAsync(sha, 1, key, value);
+    // Execute script (1 = number of Redis keys).
+    const result = await client.evalshaAsync(sha, 1, key, value);
 
-  // Check result.
-  expect(result).toBe(1);
+    // Check result.
+    expect(result).toBe(1);
   });
 });
