@@ -1,6 +1,5 @@
-const redis = require('../redis_client');
-
-let sha;
+import { getRedisClient } from "../../config/redis.config";
+let sha: string;
 
 /**
  * Get the Lua source code for the script.
@@ -20,39 +19,39 @@ const getSource = () => `
   end;
 `;
 
-const load = async () => {
-  const client = redis.getClient();
+export const load = async () => {
+  const client = await getRedisClient();
 
   // Load script on first use...
   if (!sha) {
-    sha = await client.scriptAsync('load', getSource());
+    sha = await client.scriptLoad(getSource());
   }
 
   return sha;
 };
 
-const updateIfLowest = (key, value) => [
+export const updateIfLowest = (key: string, value: string) => [
   sha, // Script SHA
   1, // Number of Redis keys
   key,
   value,
 ];
 
-module.exports = {
-  /**
-   * Load the script into Redis and return its SHA.
-   * @returns {string} - The SHA for this script.
-   */
-  load,
-
-  /**
-   * Build up an array of parameters that evalsha will use to run
-   * an atomic compare and update if lower operation.
-   *
-   * @param {string} key - Redis key that the script will operate on.
-   * @param {number} value - Value to set the key to if it passes the
-   *   comparison test.
-   * @returns {number} - 1 if the update was performed, 0 otherwise.
-   */
-  updateIfLowest,
-};
+// module.exports = {
+//   /**
+//    * Load the script into Redis and return its SHA.
+//    * @returns {string} - The SHA for this script.
+//    */
+//   load,
+// 
+//   /**
+//    * Build up an array of parameters that evalsha will use to run
+//    * an atomic compare and update if lower operation.
+//    *
+//    * @param {string} key - Redis key that the script will operate on.
+//    * @param {number} value - Value to set the key to if it passes the
+//    *   comparison test.
+//    * @returns {number} - 1 if the update was performed, 0 otherwise.
+//    */
+//   updateIfLowest,
+// };

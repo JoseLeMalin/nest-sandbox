@@ -52,7 +52,7 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    const user = this.usersRepository.findOneBy({
+    const user = await this.usersRepository.findOneBy({
       id,
     });
     console.log("user", user);
