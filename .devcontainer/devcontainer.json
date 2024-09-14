@@ -1,0 +1,61 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "Node.js & TypeScript",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"dockerComposeFile": "../docker/compose.yaml",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bullseye",
+
+	// Features to add to the dev container. More info: https://containers.dev/features || https://github.com/devcontainers/features/tree/main/src/node
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {
+			"version": true,
+			"nvmInstallPath": true,
+			"pnpmVersion": true,
+			"nvmVersion": true
+		},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": true,
+			"installOhMyZsh": true,
+			"installOhMyZshConfig": true
+		},
+		// Features community contributions: https://github.com/devcontainers-contrib/features/tree/main/src/ts-node
+		"ghcr.io/devcontainers-contrib/features/prettier:1": {},
+		"ghcr.io/devcontainers-contrib/features/pnpm:2": {},
+		"ghcr.io/devcontainers-contrib/features/ts-node:1": {}
+	},
+
+
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
+
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Set *default* container specific settings.json values on container create.
+			"settings": {
+				"editor.formatOnSave": false,
+				"files.insertFinalNewline": true
+			},
+			"extensions": [
+				"codeium.codeium",
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"mutantdino.resourcemonitor",
+				"dracula-theme.theme-dracula",
+				"gruntfuggly.todo-tree",
+				"ms-vscode.vscode-typescript-next",
+				"redhat.vscode-yaml",
+			],
+		}
+}
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
