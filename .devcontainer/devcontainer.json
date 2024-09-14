@@ -1,10 +1,12 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-	"name": "Node.js & TypeScript",
+	"name": "Nest Sandbox",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"dockerComposeFile": "../docker/compose.yaml",
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bullseye",
+	"service": "nest backend sandbox",
+	"containerUser": "node",
+	"remoteUser": "node",
 
 	// Features to add to the dev container. More info: https://containers.dev/features || https://github.com/devcontainers/features/tree/main/src/node
 	"features": {

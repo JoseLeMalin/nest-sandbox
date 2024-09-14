@@ -33,7 +33,7 @@
 # nodemon --legacy-watch server.js
 
 
-FROM node:18.17.0
+FROM node:20.16.0
 # Set the working directory in the container
 WORKDIR /app
 # Copy package.json and pnpm-lock.yaml
