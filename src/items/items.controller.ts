@@ -8,7 +8,6 @@ import { CreateItemDtoInput } from "./dto/create-item.dto";
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
 
-  
   @Post()
   create(@Body() createItemDto: CreateItemDtoInput) {
     return this.itemsService.create(createItemDto);
