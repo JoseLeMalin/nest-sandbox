@@ -11,6 +11,7 @@ const dialect = new PostgresDialect({
     max: 10,
   }),
 });
+
 export const postgresDB = new Kysely<DatabaseTables>({
   dialect,
 });
