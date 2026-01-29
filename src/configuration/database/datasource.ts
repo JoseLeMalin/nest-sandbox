@@ -10,6 +10,7 @@ const dialect = new PostgresDialect({
     port: 5434,
     max: 10,
   }),
+  
 });
 
 export const postgresDB = new Kysely<DatabaseTables>({
