@@ -43,10 +43,10 @@ This project uses Docker Compose to orchestrate a NestJS application with Postgr
 ### NestJS Application
 - **Container**: `nest-sandbox-app`
 - **Base Image**: `node:25-slim`
-- **Port**: `3000` (Application)
+- **Port**: `3000` (Internal), `6969` (External/Host)
 - **Debug Ports**: `9229` (Node.js debugger), `9230` (Tests debugger)
-- **URL**: http://localhost:3000
-- **Swagger API**: http://localhost:3000/api
+- **URL**: http://localhost:6969
+- **Swagger API**: http://localhost:6969/api
 - **User**: `node` (non-root for security)
 - **Features**:
   - Hot-reload enabled via volume mounting
@@ -267,6 +267,9 @@ docker compose exec app ps aux
 # Check network connectivity
 docker compose exec app ping postgres
 docker compose exec app curl http://localhost:3000
+
+# Test from host machine
+curl http://localhost:6969
 ```
 
 ## Production Build
@@ -308,12 +311,13 @@ docker compose exec app curl http://localhost:3000
 
 ### Port Already in Use
 
-If ports 3000, 5440, 9229, or 9230 are already in use, update the port mappings in `docker-compose.yaml`:
+If ports 6969, 5440, 9229, or 9230 are already in use, update the port mappings in `docker-compose.yaml`:
 
 ```yaml
 ports:
-  - "3001:3000"  # Change external port
-  - "9230:9229"  # Change debug port
+  - "8080:3000"  # Change external port (app listens on 3000 internally)
+  - "9239:9229"  # Change debug port
+  - "9240:9230"  # Change debug port for tests
 ```
 
 ### Permission Issues

@@ -35,11 +35,21 @@ ENV PATH="$PNPM_HOME:$PATH"
 # Set node environment, defaults to production
 # docker-compose can override this to development
 ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
+ENV NODE_ENV=$NODE_ENV
 
 # Copy and setup entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Install sudo for development
+RUN apt-get update && apt-get install -y sudo && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    echo "node ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/node && \
+    chmod 0440 /etc/sudoers.d/node
+
+# Configure git safe.directory before switching users (as root) || Avoids "detected dubious ownership" errors
+RUN git config --system --add safe.directory '*'
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 # Switch to unprivileged user for security
@@ -60,7 +70,7 @@ COPY --chown=node:node . .
 
 # default to port 3000 for node, and 9229 and 9230 (tests) for debug
 ARG PORT=3000
-ENV PORT $PORT
+ENV PORT=$PORT
 EXPOSE $PORT 9229 9230
 
 # Start development server
