@@ -1,0 +1,54 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "NestJS Sandbox with PostgreSQL",
+	"dockerComposeFile": "../docker-compose.yaml",
+	"service": "app",
+	"workspaceFolder": "/app",
+
+	// Features to add to the dev container
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {}
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally
+	"forwardPorts": [3000, 5440],
+
+	// Port labels
+	"portsAttributes": {
+		"3000": {
+			"label": "NestJS App",
+			"onAutoForward": "notify"
+		},
+		"5440": {
+			"label": "PostgreSQL",
+			"onAutoForward": "silent"
+		}
+	},
+
+	// Use 'postCreateCommand' to run commands after the container is created
+	"postCreateCommand": "pnpm install",
+
+	// Configure tool-specific properties
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"ms-azuretools.vscode-docker",
+				"rangav.vscode-thunder-client",
+				"firsttris.vscode-jest-runner"
+			],
+			"settings": {
+				"editor.formatOnSave": true,
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.codeActionsOnSave": {
+					"source.fixAll.eslint": "explicit"
+				}
+			}
+		}
+	},
+
+	// Uncomment to connect as root instead
+	// "remoteUser": "root"
+}

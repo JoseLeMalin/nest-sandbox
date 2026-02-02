@@ -8,10 +8,11 @@ import { DatabaseTables } from "../../infrastructure/database/entities/database.
 export class PostgresService {
   private dialect = new PostgresDialect({
     pool: new Pool({
-      database: "test",
-      host: "localhost",
-      user: "admin",
-      port: 5434,
+      database: process.env.POSTGRES_DB || "test",
+      host: process.env.POSTGRES_HOST || "localhost",
+      user: process.env.POSTGRES_USER || "admin",
+      password: process.env.POSTGRES_PASSWORD || "password",
+      port: parseInt(process.env.POSTGRESDB_LOCAL_PORT || "5440", 10),
       max: 10,
     }),
   });

@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+  # NestJS Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: nest-sandbox-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://admin:password@postgres:5432/test
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=test
+      - POSTGRESDB_LOCAL_PORT=5432
+      - POSTGRES_SYNCHRONIZE=true
+      - OPEN_AI_API_KEY=${OPEN_AI_API_KEY:-your_openai_key_here}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - nest-network
+    command: pnpm run start:dev
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: nest-sandbox-postgres
+    restart: unless-stopped
+    ports:
+      - "5440:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=test
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nest-network
+
+networks:
+  nest-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
