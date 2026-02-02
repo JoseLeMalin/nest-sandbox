@@ -1,6 +1,6 @@
+import { Kysely, PostgresDialect } from "kysely";
 import { Injectable } from "@nestjs/common";
 import { Pool } from "pg";
-import { Kysely, PostgresDialect } from "kysely";
 
 import { DatabaseTables } from "../../infrastructure/database/entities/database.tables";
 

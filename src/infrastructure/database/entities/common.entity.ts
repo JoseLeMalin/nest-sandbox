@@ -1,4 +1,4 @@
-export class CommonEntity {  
+export class CommonEntity {
   id!: number;
 
   createdAt!: Date;

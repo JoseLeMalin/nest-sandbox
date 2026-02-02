@@ -1,5 +1,7 @@
-import { Injectable } from "@nestjs/common";import { Kysely } from "kysely";
-import { DatabaseTables } from "src/infrastructure/database/entities/database.tables";
+import { DatabaseTables } from "../../infrastructure/database/entities/database.tables";
+import { Injectable } from "@nestjs/common";
+import { Kysely } from "kysely";
+
 import { UserEntity } from "../entities/user.entity";
 
 @Injectable()

@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { VotesService } from './votes.service';
-import { CreateVoteDto } from './dto/create-vote.dto';
-import { UpdateVoteDto } from './dto/update-vote.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { VotesService } from "./votes.service";
+import { CreateVoteDto } from "./dto/create-vote.dto";
+import { UpdateVoteDto } from "./dto/update-vote.dto";
 
-@Controller('votes')
+@Controller("votes")
 export class VotesController {
   constructor(private readonly votesService: VotesService) {}
 
@@ -17,18 +17,18 @@ export class VotesController {
     return this.votesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
     return this.votesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVoteDto: UpdateVoteDto) {
+  @Patch(":id")
+  update(@Param("id") id: string, @Body() updateVoteDto: UpdateVoteDto) {
     return this.votesService.update(+id, updateVoteDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.votesService.remove(+id);
   }
 }
