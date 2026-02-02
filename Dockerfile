@@ -1,12 +1,11 @@
-# samples taken from: https://github.com/BretFisher/node-docker-good-defaults/blob/main/Dockerfile
+# References:
+#   - https://github.com/BretFisher/node-docker-good-defaults/blob/main/Dockerfile
 
 # -------------- Development stage -------------- 
 FROM node:25-slim AS development
 
-RUN apt-get update && apt-get install -y
-
-# Install essential development packages
-RUN apt-get install -y \
+# Install essential development packages as root
+RUN apt-get update && apt-get install -y \
     git \
     curl \
     wget \
@@ -21,50 +20,43 @@ RUN apt-get install -y \
     util-linux \
     dnsutils \
     postgresql-client \
-    tzdata
+    tzdata \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install npm and pnpm globally as root
+RUN npm i npm@latest -g && \
+    npm install -g pnpm@latest-10
 
-RUN npm install -g pnpm@latest-10
-
+# Set pnpm environment
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-
-
-# set our node environment, either development or production
-# defaults to production, compose overrides this to development on build and run
+# Set node environment, defaults to production
+# docker-compose can override this to development
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 
-
-
-# you'll likely want the latest npm, regardless of node version, for speed and fixes
-# but pin this version for the best stability
-RUN npm i npm@latest -g
-
-# remember to put things that don't change much at the top for better caching
-# this entrypoint script will copy any file-based secrets into envs
+# Copy and setup entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-# the official node image provides an unprivileged user as a security best practice
-# but we have to manually enable it. We put it here so npm installs dependencies as the same
-# user who runs the app.
+# Switch to unprivileged user for security
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#non-root-user
 USER node
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
+# Copy package files (will be owned by root, but readable by node user)
+COPY --chown=node:node package.json pnpm-lock.yaml ./
 
-# Install dependencies
+# Install dependencies as node user
 RUN pnpm install
 
-# Copy source code
-COPY . .
+# Copy source code with proper ownership
+COPY --chown=node:node . .
 
 # default to port 3000 for node, and 9229 and 9230 (tests) for debug
 ARG PORT=3000
