@@ -33,7 +33,7 @@
   },
 
   // Run setup script on container start to configure permissions
-  "postStartCommand": "sudo bash /app/.devcontainer/setup-dev-permissions.sh",
+  "postCreateCommand": "sudo bash /app/.devcontainer/setup-dev-permissions.sh",
 
   // Configure tool-specific properties
   "customizations": {
