@@ -10,10 +10,14 @@
   "remoteUser": "node",
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally
-  "forwardPorts": [6969, 5440, 9229, 9230],
+  "forwardPorts": [3000, 6969, 5440, 9229, 9230],
 
   // Port labels
   "portsAttributes": {
+    "3000": {
+      "label": "NestJS App",
+      "onAutoForward": "notify"
+    },
     "6969": {
       "label": "NestJS App",
       "onAutoForward": "notify"

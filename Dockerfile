@@ -37,10 +37,6 @@ ENV PATH="$PNPM_HOME:$PATH"
 ARG NODE_ENV=production
 ENV NODE_ENV=$NODE_ENV
 
-# Copy and setup entrypoint script
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 # Install sudo for development
 RUN apt-get update && apt-get install -y sudo && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
@@ -49,8 +45,6 @@ RUN apt-get update && apt-get install -y sudo && \
 
 # Configure git safe.directory before switching users (as root) || Avoids "detected dubious ownership" errors
 RUN git config --system --add safe.directory '*'
-
-ENTRYPOINT ["docker-entrypoint.sh"]
 
 # Switch to unprivileged user for security
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#non-root-user
