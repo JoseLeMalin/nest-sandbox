@@ -74,7 +74,7 @@ ENV PORT=$PORT
 EXPOSE $PORT 9229 9230
 
 # Start development server
-CMD ["pnpm", "run", "start:dev"]
+# CMD ["pnpm", "run", "start:dev"]
 
 # -------------- Production build stage -------------- 
 # FROM node:24-alpine3.22 AS builder
