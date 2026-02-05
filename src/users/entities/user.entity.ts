@@ -1,10 +1,17 @@
+import { Insertable, Selectable, Updateable } from "kysely";
 import { CommonEntity } from "../../infrastructure/database/entities/common.entity";
-export interface UserEntity extends CommonEntity {
-  first_name: string;
-  gender: "man" | "woman" | "other" | "unknown";
 
-  // If the column is nullable in the database, make its type nullable.
-  // Don't use optional properties. Optionality is always determined
-  // automatically by Kysely.
+/**
+ * Represents the 'user' table in the database.
+ * This is the table schema interface - use the type helpers below for operations.
+ */
+export interface UserTable extends CommonEntity {
+  first_name: string;
   last_name: string | null;
+  gender: "man" | "woman" | "other" | "unknown";
 }
+
+// Type-safe helpers for different operations
+export type User = Selectable<UserTable>;
+export type NewUser = Insertable<UserTable>;
+export type UserUpdate = Updateable<UserTable>;

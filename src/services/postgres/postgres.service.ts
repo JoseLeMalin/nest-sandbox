@@ -1,23 +1,36 @@
-import { Kysely, PostgresDialect } from "kysely";
-import { Injectable } from "@nestjs/common";
-import { Pool } from "pg";
-
+import { Injectable, OnModuleDestroy } from "@nestjs/common";
+import { Kysely } from "kysely";
 import { DatabaseTables } from "../../infrastructure/database/entities/database.tables";
+import {
+  getKyselyInstance,
+  destroyKyselyInstance,
+} from "../../configuration/database/datasource";
 
+/**
+ * NestJS service wrapper for Kysely database instance.
+ * Provides the singleton Kysely instance and handles cleanup on shutdown.
+ */
 @Injectable()
-export class PostgresService {
-  private dialect = new PostgresDialect({
-    pool: new Pool({
-      database: process.env.POSTGRES_DB || "test",
-      host: process.env.POSTGRES_HOST || "localhost",
-      user: process.env.POSTGRES_USER || "admin",
-      password: process.env.POSTGRES_PASSWORD || "password",
-      port: parseInt(process.env.POSTGRESDB_LOCAL_PORT || "5440", 10),
-      max: 10,
-    }),
-  });
+export class PostgresService implements OnModuleDestroy {
+  public readonly db: Kysely<DatabaseTables>;
 
-  public readonly postgresDB = new Kysely<DatabaseTables>({
-    dialect: this.dialect,
-  });
+  constructor() {
+    // Use the singleton instance
+    this.db = getKyselyInstance();
+  }
+
+  /**
+   * Cleanup database connections when the NestJS module is destroyed.
+   */
+  async onModuleDestroy() {
+    await destroyKyselyInstance();
+  }
+
+  /**
+   * Get the Kysely instance directly.
+   * Use this.db is preferred, but this method is provided for flexibility.
+   */
+  getDb(): Kysely<DatabaseTables> {
+    return this.db;
+  }
 }
